@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<!-- Aldrich font import  -->
+<link href='https://fonts.googleapis.com/css?family=Aldrich' rel='stylesheet'>
+
+<style>
+    body{
+        background:black;
+        color: white; 
+        text-align: center;
+        font-family: Aldrich;
+    }
+    .signinup{
+        border: none;
+        background-color: inherit;
+        font-size: 2vw;
+        color: yellow;
+        font-family: Aldrich;
+        text-decoration: underline;
+    }
+    .signinup:hover{
+        color: blue;
+    }
+    .dialog{
+        background: blue;
+        color: white;
+        height: 40%;
+        width: 40%;
+          
+    }
+    .diaBtn{
+        border: 1px solid white;
+        background-color: inherit;
+        color: white;
+        font-family: Aldrich;
+        padding:10px;
+        font-size: 1.5vw;  
+    }
+    .diaBtn:hover{
+        background-color: white;
+        color:blue;
+    }
+    .input{
+        height: 2vw; 
+        width: 80%; 
+        font-size: 1.5vw;
+    }
+    .diaCloseBtn{
+        float: right;
+        background-color: inherit;
+        color: white; 
+        border: none;
+        font-size: 1.5vw;  
+    }
+
+</style>
+
+<body >
+    <h1 style=" font-size: 5vw;"; >Our World</h1>
+    <p id="homeMessage" style=" font-size: 2vw;"><button id="signIn" class="signinup">sign in</button> or <button id="signUp" class="signinup" >sign up</button>  to contribute to the community</p>
+
+    <dialog class ="dialog" id="signInDia">
+        <button class="diaCloseBtn" onclick="closeDialog()">X</button>
+        <div style="padding: 5%;">
+        <h1 style="font-size: 3vw">sign in </h1>
+            <form id="login" >
+                <p style="font-size: 1.5vw;  ">username</p>
+                <input class="input" type="text" name="login1" />
+                <br>
+                <br>
+                <p style="font-size: 1.5vw;">password</p>
+                <input class="input" type="password" name="password1" id="password1" />
+               <br>
+               <br>
+               <br>
+                <button class="diaBtn">
+                  sign in
+                </button>
+        </form>
+    </div>
+      </dialog>
+
+    <dialog class ="dialog" id="signUpDia">
+       <button onclick="closeDialog()" class="diaCloseBtn">X</button>
+        <div style="padding: 5%;">
+         <h1 style="font-size: 3vw">sign up for a new account </h1>
+             <form id="signup-form" >
+                 <p style="font-size: 1.5vw; ">username</p>
+                 <input class="input" type="text" name="login" />
+                 <br>
+                 <br>
+                 <p style="font-size: 1.5vw;">password</p>
+                 <input class="input" type="password" name="password" id="password" />
+                <br>
+                <br>
+                <br>
+                 <button class="diaBtn">
+                   sign up
+                 </button>
+         </form>
+     </div>
+    </dialog>
+
+    <!-- firebase imports -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-auth-compat.js"></script>
+
+      <!-- sign in and sign up dialog -->
+      <script>
+        const signInButton = document.getElementById('signIn');
+        const signUpButton = document.getElementById('signUp');
+        const signInDia = document.getElementById('signInDia');
+        const signUpDia = document.getElementById('signUpDia');
+
+        function closeDialog(){ 
+            signInDia.close();
+            signUpDia.close();  
+            } 
+     
+        // opens sign in dialog box
+        signInButton.addEventListener('click', function onOpen() {
+        if (typeof signInDia.showModal === "function") {
+            signInDia.showModal();
+        } else {
+            outputBox.value = "Sorry, the <dialog> API is not supported by this browser.";
+        }
+        });
+       // opens sign up dialog box
+        signUpButton.addEventListener('click', function onOpen() {
+        if (typeof signUpDia.showModal === "function") {
+            signUpDia.showModal();
+        } else {
+            outputBox.value = "Sorry, the <dialog> API is not supported by this browser.";
+        }
+        });
+      </script>
+
+<!-- sign up and sign in functionality  -->
+<script>
+
+    let signedIn = false;
+   
+      window.onload = () => {
+        console.log('Running onload')
+        const firebaseConfig = {
+          apiKey: "AIzaSyBVSkGDVf0zYR2pPKQASc8yiCu5dBr3Rpc",
+          authDomain: "ourworld-7d07d.firebaseapp.com",
+          projectId: "ourworld-7d07d",
+          storageBucket: "ourworld-7d07d.appspot.com",
+          messagingSenderId: "964947280134",
+          appId: "1:964947280134:web:c8d5dc605816a19ba35e87",
+          measurementId: "G-27RVR7708T"
+        };
+    
+        const app = firebase.initializeApp(firebaseConfig);
+    
+        app.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+        
+        //sign up 
+        document
+          .getElementById("signup-form")
+          .addEventListener("submit", (event) => {
+            event.preventDefault();
+            const login = event.target.login.value;
+            const password = event.target.password.value;
+          
+            app.auth().createUserWithEmailAndPassword(login, password)
+              .then((userCredential) => {
+                // Signed in 
+                var user = userCredential.user;
+                user.getIdToken().then((idToken) => {
+                  fetch('/sessionLogin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idToken })
+                  }).then(() => {
+                    signedIn = true
+                    document.getElementById("homeMessage").innerHTML = "click on a country to contribute to the community";
+                    signUpDia.close()
+                    document.body.style.backgroundColor = "blue";
+                   // window.location.href = '/dashboard'
+                  })
+                })
+                // ...
+              })
+                .catch((error) => {
+                  const errorCode = error.code;
+                  const errorMessage = error.message;
+                  // ..
+                });
+    
+            return false;
+          });
+      
+        //sign in 
+        document
+            .getElementById("login")
+            .addEventListener("submit", (event) => {
+                event.preventDefault();
+                const login = event.target.login1.value;
+                const password = event.target.password1.value;
+
+                // CS5356 TODO #3
+                // Sign in using the Firebase SDK for Web
+                // Get the users ID token
+                // Start a new session with the users ID token
+                // Redirect the user to the /dashboard
+
+                app.auth().signInWithEmailAndPassword(login, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    // ...
+                    user.getIdToken().then((idToken) => {
+                    fetch('/sessionLogin', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ idToken })
+                    }).then(() => {
+                        signedIn = true
+                        document.getElementById("homeMessage").innerHTML = "click on a country to contribute to the community";
+                        signInDia.close()
+                        document.body.style.backgroundColor = "blue";
+                       // window.location.href = '/dashboard'
+                    })
+                    })
+                })
+                return false;
+            });
+            
+      
+        };
+
+
+    </script>
+
+
+    <br>
+    <br>
+   
+    <!-- globe  -->
+    <div id="observablehq-globe-eebb64eb"></div>
+    <script>
+       var country = " "
+    </script>
+    <!-- globe import script -->
+    <script type="module">
+    import {Runtime, Inspector} from "https://cdn.jsdelivr.net/npm/@observablehq/runtime@4/dist/runtime.js";
+    import define from "https://api.observablehq.com/@sketh444/globe.js?v=3";
+    
+    new Runtime().module(define, name => {
+      if (name === "globe") return new Inspector(document.querySelector("#observablehq-globe-eebb64eb"));  
+    }); 
+
+    Runtime.load(define, (variable) => {
+        if (variable.name === "countryClicked") {
+            country = (value)
+        }
+        });
+
+
+    </script>
+    <script>
+        
+        if (country == "France") {
+            console.log(country)
+            window.location.href = '/dashboard'
+
+    }
+    </script>
