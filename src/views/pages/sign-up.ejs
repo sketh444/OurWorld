@@ -1,0 +1,96 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head') %>
+</head>
+
+<body>
+  <header>
+    <%- include('../partials/nav') %>
+  </header>
+
+  <div class="container">
+    Sign Up for a new account or <a href="/sign-in">click here to sign in with an existing account</a>
+    <form id="login-form">
+      <label>Login</label>
+      <input id="login" type="text" name="login" />
+      <label>Password</label>
+      <input type="password" name="password" />
+      <button>Log in</button>
+    </form>
+    <div id="login-error" style="display: none;">
+    </div>
+    <a href="/dashboard">Dashboard</a>
+  </div>
+</body>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.4/firebase-auth-compat.js"></script>
+
+
+<script>
+
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+
+// getAuth = require('firebase/auth')
+// createUserWithEmailAndPassword = require('firebase/auth')
+
+  window.onload = () => {
+    console.log('Running onload')
+    const firebaseConfig = {
+      // CS5356 TODO #2
+      apiKey: "AIzaSyBCB49vKc7eKLSStBf106XoaiPce2s5tSk",
+      authDomain: "ruff-house.firebaseapp.com",
+      projectId: "ruff-house",
+      storageBucket: "ruff-house.appspot.com",
+      messagingSenderId: "1026458389257",
+      appId: "1:1026458389257:web:955a6f1b4e3f4b272361d8",
+      measurementId: "G-MBFMKSY5ZV"
+    };
+
+    const app = firebase.initializeApp(firebaseConfig);
+
+    app.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+    document
+      .getElementById("login-form")
+      .addEventListener("submit", (event) => {
+        event.preventDefault();
+        const login = event.target.login.value;
+        const password = event.target.password.value;
+
+        // CS5356 TODO #3
+        // Create a new user using the Firebase SDK for Web
+        // Get the users ID token
+        // Start a new session with the users ID token
+        // Redirect the user to the /dashboard
+
+        
+        app.auth().createUserWithEmailAndPassword(login, password)
+          .then((userCredential) => {
+            // Signed in 
+            var user = userCredential.user;
+            user.getIdToken().then((idToken) => {
+              fetch('/sessionLogin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ idToken })
+              }).then(() => {
+                window.location.href = '/dashboard'
+              })
+            })
+            // ...
+          })
+            .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              // ..
+            });
+
+        return false;
+      });
+  };
+</script>
+
+</html> -->
