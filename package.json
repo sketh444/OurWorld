@@ -10,15 +10,18 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.1",
+    "browserify": "^17.0.0",
     "bulma": "^0.9.3",
     "casual": "^1.6.2",
     "cookie-parser": "^1.4.6",
+    "d3": "^7.4.4",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.20.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "requirejs": "^2.3.6"
   },
   "devDependencies": {
     "cypress": "^9.3.1"
