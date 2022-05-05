@@ -70,8 +70,9 @@ ul.list li{
 
     }
     .right {
-    width: 70%;
-    padding-left: 14.5%;
+    width: 90%;
+    padding-left: 45%;
+    position: absolute;
     }
     .row:after {
     content: "";
@@ -127,7 +128,7 @@ ul.list li{
 </head>
 
 <body>
-<h1 style=" font-size: 4vw; padding-left: 5%; padding-top: 2%;";><a style="text-decoration: none; color: white;" href= "http://localhost:5000/">Our World</a></h1>
+<h1 style=" font-size: 4vw; padding-left: 5%; padding-top: 2%;";><a style="text-decoration: none; color: white;" href= "https://ourworld-7d07d.web.app/">Our World</a></h1>
 
 <!-- <div id="parent">
 <img class="child" src="/static/world-globe.png" >
@@ -149,10 +150,11 @@ ul.list li{
 
     <div class="column right" >
           <p style="font-size: 2.5vw;"> Columbia's Timeline</p>
-          <p id="homeMessage" style=" font-size: 1vw;"><button id="signIn" class="signinup">sign in</button> or <button id="signUp" class="signinup" >sign up</button>  to contribute to the community</p>
+          <p id="homeMessage" style=" font-size: 1vw; "><button id="signIn" class="signinup">sign in</button> or <button id="signUp" class="signinup" >sign up</button>  to contribute to the community</p>
         </div>
     </div>
        
+    
         
         <ul class="list" id="list">
         <% posts.forEach(function(feedItem) { %>

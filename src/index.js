@@ -47,13 +47,13 @@ app.get("/", function (req, res) {
   res.render("pages/index");
 });
 
-app.get("/sign-in", function (req, res) {
-  res.render("pages/sign-in");
-});
+// app.get("/sign-in", function (req, res) {
+//   res.render("pages/sign-in");
+// });
 
-app.get("/sign-up", function (req, res) {
-  res.render("pages/sign-up", { world_json, country_names });
-});
+// app.get("/sign-up", function (req, res) {
+//   res.render("pages/sign-up", { world_json, country_names });
+// });
 
 app.get("/dashNew", authMiddleware, async function (req, res) {
   const feed = await userFeed.get();
@@ -134,9 +134,9 @@ app.post("/sessionLogin", async (req, res) => {
     .auth()
     .createSessionCookie(idToken, { expiresIn })
     .then(
-      session => {
+      __session => {
         const options = { maxAge: expiresIn, httpOnly: true };
-        res.cookie("session", session, options);
+        res.cookie("__session", __session, options);
         res.status(200).send(JSON.stringify({ status: "success" }));
       },
       error => {
@@ -146,7 +146,7 @@ app.post("/sessionLogin", async (req, res) => {
 });
 
 app.get("/sessionLogout", (req, res) => {
-  res.clearCookie("session");
+  res.clearCookie("__session");
   res.redirect("/sign-in");
 });
 
